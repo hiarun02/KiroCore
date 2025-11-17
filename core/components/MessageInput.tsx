@@ -1,0 +1,83 @@
+"use client";
+
+import {useState, useRef, KeyboardEvent} from "react";
+import {motion} from "framer-motion";
+import {MessageInputProps} from "@/core/types/components";
+
+export function MessageInput({
+  onSend,
+  disabled = false,
+  placeholder = "Type your message...",
+}: MessageInputProps) {
+  const [value, setValue] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const handleSend = () => {
+    if (value.trim() && !disabled) {
+      onSend(value.trim());
+      setValue("");
+      if (textareaRef.current) {
+        textareaRef.current.style.height = "auto";
+      }
+    }
+  };
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
+
+  const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setValue(e.target.value);
+
+    // Auto-resize textarea
+    const textarea = e.target;
+    textarea.style.height = "auto";
+    const newHeight = Math.min(textarea.scrollHeight, 120); // Max 5 lines (~120px)
+    textarea.style.height = `${newHeight}px`;
+  };
+
+  return (
+    <motion.div className="relative" animate={isFocused ? "active" : "idle"}>
+      <div className="flex items-end gap-2 p-3 bg-zinc-900 rounded-2xl border-2 border-zinc-800 transition-all duration-300 focus-within:border-primary focus-within:shadow-[0_0_20px_rgba(139,92,246,0.5)]">
+        <textarea
+          ref={textareaRef}
+          value={value}
+          onChange={handleInput}
+          onKeyDown={handleKeyDown}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          disabled={disabled}
+          placeholder={placeholder}
+          rows={1}
+          className="flex-1 bg-transparent text-zinc-100 placeholder:text-zinc-400 resize-none outline-none min-h-[24px] max-h-[120px]"
+          aria-label="Message input"
+        />
+
+        <button
+          onClick={handleSend}
+          disabled={disabled || !value.trim()}
+          className="shrink-0 w-10 h-10 flex items-center justify-center rounded-xl bg-primary text-white disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 active:scale-95 transition-transform"
+          aria-label="Send message"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <line x1="22" y1="2" x2="11" y2="13" />
+            <polygon points="22 2 15 22 11 13 2 9 22 2" />
+          </svg>
+        </button>
+      </div>
+    </motion.div>
+  );
+}

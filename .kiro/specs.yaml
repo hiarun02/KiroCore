@@ -1,0 +1,80 @@
+# KiroCore - Specs Configuration
+# This file defines how specs are used in the KiroCore project
+
+project:
+  name: KiroCore
+  description: Universal AI agent app foundation - one skeleton, endless AI apps
+  tagline: "One skeleton, endless AI apps"
+
+specs_usage:
+  purpose: |
+    Specs in KiroCore are used to plan and implement new features systematically.
+    Each spec follows a structured workflow: Requirements → Design → Tasks → Implementation
+
+  when_to_create:
+    - Adding new agent app types (e.g., StudyBuddy, IdeaForge)
+    - Building new core components (e.g., chat interface, agent config loader)
+    - Implementing backend API routes
+    - Adding new UI features or pages
+
+  workflow:
+    1_requirements: |
+      Define user stories and acceptance criteria using EARS format
+      Example: "As a developer, I want to create a new AI app by adding a config file"
+
+    2_design: |
+      Create technical design with architecture, components, and data models
+      Include API endpoints, component hierarchy, and data flow diagrams
+
+    3_tasks: |
+      Break down implementation into actionable coding tasks
+      Each task should be specific and reference requirements
+
+    4_implementation: |
+      Execute tasks one by one using Kiro's task execution feature
+      Mark tasks complete as you finish them
+
+  existing_specs:
+    - name: universal-kiro-app
+      path: .kiro/specs/universal-kiro-app/
+      status: completed
+      description: Core UI components (Header, Footer, Chat, Hero)
+
+  future_specs:
+    - name: agent-config-system
+      description: Dynamic agent config loader and personality switcher
+      priority: high
+
+    - name: backend-api-integration
+      description: Express backend with OpenAI API integration
+      priority: high
+
+    - name: studybuddy-app
+      description: AI tutor app configuration and customization
+      priority: medium
+
+    - name: ideaforge-app
+      description: Startup idea generator app configuration
+      priority: medium
+
+best_practices:
+  - Start with clear requirements before coding
+  - Use specs for complex features (3+ components or files)
+  - Keep tasks small and focused (1-2 hours max)
+  - Reference requirements in task descriptions
+  - Update spec status as you progress
+  - Use specs to document architectural decisions
+
+examples:
+  creating_new_spec: |
+    1. Create folder: .kiro/specs/my-feature/
+    2. Add requirements.md with user stories
+    3. Add design.md with technical approach
+    4. Add tasks.md with implementation checklist
+    5. Execute tasks using Kiro's task runner
+
+  spec_structure: |
+    .kiro/specs/feature-name/
+    ├── requirements.md  # User stories & acceptance criteria
+    ├── design.md        # Architecture & technical design
+    └── tasks.md         # Implementation task list
