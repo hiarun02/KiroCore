@@ -160,8 +160,11 @@
   - Provide user-friendly error messages
   - _Requirements: 10.5_
 
-- [ ] 8. Connect frontend to backend
-- [ ] 8.1 Update ChatArea to use real API
+- [x] 8. Connect frontend to backend
+
+
+- [x] 8.1 Update ChatArea to use real API
+
 
   - Replace mock responses with API calls
   - Use sendChatMessage from API service
@@ -169,12 +172,14 @@
   - Display API responses
   - _Requirements: 6.2, 6.3, 6.4_
 
+
 - [ ] 8.2 Implement error handling in UI
 
   - Display error messages to users
   - Handle network failures gracefully
   - Show retry options
   - _Requirements: 10.5_
+
 
 - [ ] 8.3 Add loading indicators
 

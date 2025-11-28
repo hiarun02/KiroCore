@@ -60,10 +60,10 @@ export function Hero() {
           transition={{duration: 0.6, delay: 0.6}}
         >
           <Link
-            href="/chat"
+            href="/apps"
             className="group relative px-8 py-4 bg-primary text-white rounded-xl font-semibold text-lg hover:scale-105 active:scale-95 transition-transform shadow-[0_0_30px_rgba(139,92,246,0.4)] hover:shadow-[0_0_40px_rgba(139,92,246,0.6)]"
           >
-            Start Chatting
+            Browse Apps
             <span className="ml-2 inline-block group-hover:translate-x-1 transition-transform">
               →
             </span>

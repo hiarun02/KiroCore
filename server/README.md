@@ -80,4 +80,3 @@ Currently using mock responses for MVP. Uncomment `executeKiroCLI()` function in
 - Backend runs on port 3001
 - Frontend runs on port 3000
 - CORS enabled for local development
-

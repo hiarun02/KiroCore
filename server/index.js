@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import {chatRouter} from "./routes/chat.js";
 import {appsRouter} from "./routes/apps.js";
+import {kiroRouter} from "./routes/kiro.js";
 import {testKiroCLI} from "./services/kiro-service.js";
 
 const app = express();
@@ -14,6 +15,7 @@ app.use(express.json());
 // Routes
 app.use("/api/chat", chatRouter);
 app.use("/api/apps", appsRouter);
+app.use("/api/kiro", kiroRouter);
 
 // Startup checks
 async function startServer() {

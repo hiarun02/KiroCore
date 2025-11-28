@@ -8,7 +8,7 @@ const appConfig = {
     attribution: "Built with Kiro 💀",
     links: [
       {label: "GitHub", href: "https://github.com"},
-      {label: "Docs", href: "https://docs.example.com"},
+      {label: "Browse Apps", href: "/apps"},
     ],
   },
 };
