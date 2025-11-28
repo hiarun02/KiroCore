@@ -33,6 +33,8 @@ export function MessageList({messages, isLoading}: MessageListProps) {
             key={message.id}
             content={message.content}
             timestamp={message.timestamp}
+            source={message.source}
+            error={message.error}
           />
         )
       )}

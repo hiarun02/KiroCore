@@ -175,58 +175,6 @@ export function About() {
             </div>
           </div>
         </motion.div>
-
-        {/* Example Apps */}
-        <motion.div
-          className="mt-16 sm:mt-20"
-          initial={{opacity: 0, y: 20}}
-          whileInView={{opacity: 1, y: 0}}
-          viewport={{once: true}}
-          transition={{duration: 0.6, delay: 0.8}}
-        >
-          <h3 className="text-2xl sm:text-3xl font-bold text-zinc-100 text-center mb-4">
-            Example Apps Built with KiroCore
-          </h3>
-          <p className="text-zinc-400 text-center mb-12 max-w-2xl mx-auto">
-            Same codebase, different personalities
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-4xl mx-auto">
-            {/* StudyBuddy */}
-            <div className="p-6 sm:p-8 bg-linear-to-br from-blue-500/10 to-purple-500/10 rounded-2xl border border-blue-500/20 hover:border-blue-500/40 transition-colors">
-              <div className="text-5xl mb-4">📚</div>
-              <h4 className="text-2xl font-bold text-zinc-100 mb-2">
-                StudyBuddy
-              </h4>
-              <p className="text-zinc-400 mb-4">
-                An AI tutor that helps students learn any subject with patience
-                and encouragement
-              </p>
-              <div className="inline-flex items-center gap-2 text-sm text-blue-400">
-                <span>AI Tutor</span>
-                <span>•</span>
-                <span>Educational</span>
-              </div>
-            </div>
-
-            {/* IdeaForge */}
-            <div className="p-6 sm:p-8 bg-linear-to-br from-purple-500/10 to-pink-500/10 rounded-2xl border border-purple-500/20 hover:border-purple-500/40 transition-colors">
-              <div className="text-5xl mb-4">💡</div>
-              <h4 className="text-2xl font-bold text-zinc-100 mb-2">
-                IdeaForge
-              </h4>
-              <p className="text-zinc-400 mb-4">
-                A startup idea generator that helps entrepreneurs brainstorm and
-                validate business concepts
-              </p>
-              <div className="inline-flex items-center gap-2 text-sm text-purple-400">
-                <span>Startup Advisor</span>
-                <span>•</span>
-                <span>Business</span>
-              </div>
-            </div>
-          </div>
-        </motion.div>
       </div>
     </section>
   );

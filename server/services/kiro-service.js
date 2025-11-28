@@ -2,11 +2,8 @@ import {exec} from "child_process";
 import {promisify} from "util";
 import path from "path";
 import fs from "fs/promises";
-import {fileURLToPath} from "url";
 
-const execAsync = promisify(exec); // 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const execAsync = promisify(exec);
 
 /**
  * Execute Kiro CLI agent for a specific app
@@ -62,10 +59,10 @@ export async function executeKiroAgent({
  * Execute Kiro CLI command
  * @param {string} kiroPath - Path to .kiro directory
  * @param {string} message - User message
- * @param {string} context - Conversation context
+ * @param {string} _context - Conversation context (reserved for future use)
  * @returns {Promise<string>} - AI response
  */
-async function executeKiroCLI(kiroPath, message, context) {
+async function executeKiroCLI(kiroPath, message, _context) {
   try {
     // Escape message for shell
     const escapedMessage = message.replace(/"/g, '\\"');
@@ -138,10 +135,10 @@ function buildConversationContext(history) {
 /**
  * Get fallback response when Kiro is unavailable
  * @param {string} appType - App type
- * @param {string} message - User message
+ * @param {string} _message - User message (reserved for future use)
  * @returns {Promise<Object>} - Fallback response
  */
-async function getFallbackResponse(appType, message) {
+async function getFallbackResponse(appType, _message) {
   // Simulate processing delay
   await new Promise((resolve) => setTimeout(resolve, 800));
 

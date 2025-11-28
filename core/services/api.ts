@@ -17,6 +17,7 @@ export interface ChatResponse {
   response: string;
   appType: string;
   timestamp: string;
+  source?: "kiro-cli" | "fallback";
   error?: string;
 }
 
@@ -28,7 +29,7 @@ export interface AppConfig {
   systemPrompt: string;
   welcomeMessage: string;
   features: string[];
-  theme: Record<string, any>; 
+  theme: Record<string, string | number>;
 }
 
 /**
@@ -109,5 +110,30 @@ export async function checkBackendHealth(): Promise<boolean> {
   } catch (error) {
     console.error("Backend health check failed:", error);
     return false;
+  }
+}
+
+/**
+ * Check Kiro CLI status
+ */
+export async function checkKiroStatus(): Promise<{
+  available: boolean;
+  message: string;
+}> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/kiro/status`);
+
+    if (!response.ok) {
+      return {available: false, message: "Failed to check Kiro status"};
+    }
+
+    const data = await response.json();
+    return {
+      available: data.available || false,
+      message: data.message || "Unknown status",
+    };
+  } catch (error) {
+    console.error("Kiro status check failed:", error);
+    return {available: false, message: "Connection failed"};
   }
 }

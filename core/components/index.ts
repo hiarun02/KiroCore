@@ -18,3 +18,4 @@ export {MessageInput} from "./chat/MessageInput";
 
 // UI Components
 export {ScrollToTop} from "./ui/ScrollToTop";
+export {AppBrowser} from "./AppBrowser";
