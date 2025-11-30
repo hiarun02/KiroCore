@@ -3,7 +3,6 @@
 import {HeaderProps} from "@/core/types/components";
 import Link from "next/link";
 import {useEffect, useState} from "react";
-import {KiroStatus} from "@/core/components/status/KiroStatus";
 import {DynamicIcon} from "@/core/lib/icons";
 
 export function Header({appName, appIcon = "👻"}: HeaderProps) {
@@ -49,8 +48,6 @@ export function Header({appName, appIcon = "👻"}: HeaderProps) {
 
           {/* Navigation */}
           <div className="flex items-center gap-2 sm:gap-4">
-            <KiroStatus />
-
             <Link
               href="/docs"
               className="hidden md:block px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium text-zinc-300 hover:text-primary transition-colors"

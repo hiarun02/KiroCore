@@ -4,7 +4,9 @@ import {ChatArea} from "@/core/components";
 import {Sidebar} from "@/core/components/chat/Sidebar";
 import Link from "next/link";
 import {useParams} from "next/navigation";
-import {useEffect, useState} from "react";
+import {useEffect, useState, useCallback} from "react";
+import {useKeyboardShortcuts} from "@/core/hooks/useKeyboardShortcuts";
+import {ShortcutsModal} from "@/core/components/ui/ShortcutsModal";
 
 type AppConfig = {
   name: string;
@@ -32,24 +34,151 @@ export default function AppPage() {
   const [selectedConversationId, setSelectedConversationId] = useState<
     string | undefined
   >();
+  const [showShortcuts, setShowShortcuts] = useState(false);
 
-  const handleNewChat = () => {
-    // Set to "new" to trigger new conversation creation
+  const handleNewChat = useCallback(() => {
     setSelectedConversationId("new");
-    setChatKey((prev) => prev + 1); // Force ChatArea to remount
+    setChatKey((prev) => prev + 1);
     setMenuOpen(false);
-  };
+  }, []);
 
-  const handleSelectConversation = (conversationId: string) => {
+  const handleSelectConversation = useCallback((conversationId: string) => {
     setSelectedConversationId(conversationId);
-    setChatKey((prev) => prev + 1); // Force ChatArea to remount
-  };
+    setChatKey((prev) => prev + 1);
+  }, []);
 
-  const handleClearChat = () => {
+  const handleClearChat = useCallback(() => {
     const storageKey = `kirocore_chat_${appType}`;
     localStorage.removeItem(storageKey);
     window.location.reload();
-  };
+  }, [appType]);
+
+  const handleExportChat = useCallback(async () => {
+    const {default: toast} = await import("react-hot-toast");
+    const storageKey = `kirocore_conversations_${appType}`;
+    const data = localStorage.getItem(storageKey);
+
+    if (!data) {
+      toast.error("No chat history to export");
+      return;
+    }
+
+    try {
+      const {jsPDF} = await import("jspdf");
+      const conversations = JSON.parse(data);
+
+      const doc = new jsPDF();
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const margin = 15;
+      const maxWidth = pageWidth - 2 * margin;
+      let yPos = 20;
+
+      // Title
+      doc.setFontSize(18);
+      doc.setFont("helvetica", "bold");
+      doc.text(`${config?.name || appType} - Chat Export`, margin, yPos);
+      yPos += 10;
+
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      doc.text(`Exported: ${new Date().toLocaleDateString()}`, margin, yPos);
+      yPos += 15;
+
+      // Get all messages from all conversations
+      const allMessages: Array<{
+        role: string;
+        content: string;
+        timestamp: string;
+      }> = [];
+
+      const convs = conversations as Record<
+        string,
+        {messages?: Array<{role: string; content: string; timestamp: string}>}
+      >;
+      Object.values(convs).forEach((conv) => {
+        if (conv.messages) {
+          allMessages.push(...conv.messages);
+        }
+      });
+
+      // Sort by timestamp
+      allMessages.sort(
+        (a, b) =>
+          new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+      );
+
+      // Add messages
+      allMessages.forEach((msg) => {
+        if (yPos > 270) {
+          doc.addPage();
+          yPos = 20;
+        }
+
+        doc.setFontSize(10);
+        doc.setFont("helvetica", "bold");
+        const role = msg.role === "user" ? "You" : "AI";
+        const time = new Date(msg.timestamp).toLocaleTimeString();
+        doc.text(`${role} (${time}):`, margin, yPos);
+        yPos += 6;
+
+        doc.setFont("helvetica", "normal");
+        const lines = doc.splitTextToSize(msg.content, maxWidth);
+        lines.forEach((line: string) => {
+          if (yPos > 270) {
+            doc.addPage();
+            yPos = 20;
+          }
+          doc.text(line, margin, yPos);
+          yPos += 5;
+        });
+        yPos += 5;
+      });
+
+      doc.save(`${appType}-chat-${new Date().toISOString().split("T")[0]}.pdf`);
+      const {default: toast} = await import("react-hot-toast");
+      toast.success("Chat exported successfully!");
+      setMenuOpen(false);
+    } catch (error) {
+      console.error("Export failed:", error);
+      const {default: toast} = await import("react-hot-toast");
+      toast.error("Failed to export chat");
+    }
+  }, [appType, config]);
+
+  // Keyboard shortcuts
+  useKeyboardShortcuts([
+    {
+      key: "n",
+      ctrl: true,
+      callback: handleNewChat,
+      description: "New chat",
+    },
+    {
+      key: "b",
+      ctrl: true,
+      callback: () => setSidebarOpen((prev) => !prev),
+      description: "Toggle sidebar",
+    },
+    {
+      key: "e",
+      ctrl: true,
+      shift: true,
+      callback: handleExportChat,
+      description: "Export chat",
+    },
+    {
+      key: "k",
+      ctrl: true,
+      shift: true,
+      callback: handleClearChat,
+      description: "Clear chat",
+    },
+    {
+      key: "?",
+      callback: () => setShowShortcuts(true),
+      description: "Show shortcuts",
+    },
+  ]);
 
   useEffect(() => {
     if (!appType) return;
@@ -122,23 +251,25 @@ export default function AppPage() {
           sidebarOpen ? "lg:ml-64" : "lg:ml-0"
         } relative`}
       >
-        {/* Sidebar Toggle Button */}
-        <button
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="fixed top-4 left-4 z-50 p-2 bg-zinc-900 hover:bg-zinc-800 rounded-lg transition-colors border border-zinc-800 shadow-lg"
-          aria-label={sidebarOpen ? "Close sidebar" : "Open sidebar"}
-        >
-          {sidebarOpen ? <FiSidebar /> : <FiSidebar />}
-        </button>
+        {/* Sidebar Toggle Button - Only show when closed */}
+        {!sidebarOpen && (
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="fixed top-3 left-3 z-50 p-1.5 sm:p-2 bg-zinc-900 hover:bg-zinc-800 rounded-lg transition-colors border border-zinc-800 shadow-lg"
+            aria-label="Open sidebar"
+          >
+            <FiSidebar className="w-5 h-5 sm:w-6 sm:h-6" />
+          </button>
+        )}
 
         {/* Floating Menu Button - Top Right */}
-        <div className="fixed top-4 right-4 z-50">
+        <div className="fixed top-3 right-3 z-50">
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="p-2 bg-zinc-900 hover:bg-zinc-800 rounded-lg transition-colors border border-zinc-800 shadow-lg"
+            className="p-1.5 sm:p-2 bg-zinc-900 hover:bg-zinc-800 rounded-lg transition-colors border border-zinc-800 shadow-lg"
           >
             <svg
-              className="w-6 h-6 text-zinc-100"
+              className="w-5 h-5 sm:w-6 sm:h-6 text-zinc-100"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -209,6 +340,49 @@ export default function AppPage() {
 
                 <button
                   onClick={() => {
+                    setShowShortcuts(true);
+                    setMenuOpen(false);
+                  }}
+                  className="flex items-center gap-3 px-4 py-3 text-sm text-zinc-100 hover:bg-zinc-800 transition-colors w-full text-left"
+                >
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
+                    />
+                  </svg>
+                  Keyboard Shortcuts
+                </button>
+
+                <button
+                  onClick={handleExportChat}
+                  className="flex items-center gap-3 px-4 py-3 text-sm text-zinc-100 hover:bg-zinc-800 transition-colors w-full text-left"
+                >
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                    />
+                  </svg>
+                  Export Chat
+                </button>
+
+                <button
+                  onClick={() => {
                     handleClearChat();
                     setMenuOpen(false);
                   }}
@@ -242,7 +416,34 @@ export default function AppPage() {
           appType={appType}
           conversationId={selectedConversationId}
         />
+
+        {/* Floating Shortcuts Hint */}
+        <button
+          onClick={() => setShowShortcuts(true)}
+          className="fixed bottom-6 left-6 p-3 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 rounded-full shadow-lg transition-all hover:scale-110 group"
+          title="Keyboard shortcuts (?)"
+        >
+          <svg
+            className="w-5 h-5 text-zinc-400 group-hover:text-zinc-100"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
+            />
+          </svg>
+        </button>
       </div>
+
+      {/* Keyboard Shortcuts Modal */}
+      <ShortcutsModal
+        isOpen={showShortcuts}
+        onClose={() => setShowShortcuts(false)}
+      />
     </div>
   );
 }

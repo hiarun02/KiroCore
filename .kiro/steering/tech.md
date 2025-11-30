@@ -64,6 +64,22 @@ npm run lint
 - `server/.env` - Backend environment variables
 - Both have `.example` files for reference
 
+## AI Integration
+
+- **Google Gemini AI** - Gemini 2.5 Flash model
+- **@google/generative-ai** - Official Gemini SDK
+- System instructions for app personalities
+- Conversation history support
+- Streaming responses ready
+
+## UI Libraries
+
+- **react-markdown** - Markdown rendering
+- **remark-gfm** - GitHub Flavored Markdown
+- **react-hot-toast** - Toast notifications
+- **react-icons** - Icon library (Feather, Hero Icons)
+- **jspdf** - PDF export functionality
+
 ## Key Dependencies
 
 - `react` & `react-dom` - v19.2.0
@@ -71,3 +87,17 @@ npm run lint
 - `express` - v5.1.0
 - `framer-motion` - v12.23.24
 - `typescript` - v5
+- `react-markdown` - Latest
+- `react-hot-toast` - Latest
+- `jspdf` - Latest
+
+## Features Implemented
+
+- ✅ Markdown rendering with code blocks
+- ✅ Copy code button
+- ✅ Typing indicator
+- ✅ Toast notifications
+- ✅ Keyboard shortcuts
+- ✅ PDF export
+- ✅ Conversation history
+- ✅ Performance optimizations (useCallback, memoization)

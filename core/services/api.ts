@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 
 export interface ChatMessage {
   role: "user" | "assistant";
@@ -18,7 +18,6 @@ export interface ChatResponse {
   appType: string;
   timestamp: string;
   source?: "kiro-cli" | "fallback";
-  error?: string;
 }
 
 export interface AppConfig {
@@ -32,108 +31,37 @@ export interface AppConfig {
   theme: Record<string, string | number>;
 }
 
-/**
- * Send a chat message to the backend
- */
 export async function sendChatMessage(
   request: ChatRequest
 ): Promise<ChatResponse> {
-  try {
-    const response = await fetch(`${API_BASE_URL}/api/chat`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(request),
-    });
+  const response = await fetch(`${API_URL}/api/chat`, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(request),
+  });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Chat API error:", error);
-    throw error;
-  }
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  return response.json();
 }
 
-/**
- * Get all available apps
- */
 export async function getAllApps(): Promise<AppConfig[]> {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/apps`);
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
+    const response = await fetch(`${API_URL}/api/apps`);
+    if (!response.ok) return [];
     const data = await response.json();
     return data.apps || [];
-  } catch (error) {
-    console.error("Apps API error:", error);
+  } catch {
     return [];
   }
 }
 
-/**
- * Get specific app configuration
- */
 export async function getAppConfig(appType: string): Promise<AppConfig | null> {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/apps/${appType}`);
-
-    if (!response.ok) {
-      if (response.status === 404) {
-        return null;
-      }
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
+    const response = await fetch(`${API_URL}/api/apps/${appType}`);
+    if (!response.ok) return null;
     const data = await response.json();
     return data.config || null;
-  } catch (error) {
-    console.error("App config API error:", error);
+  } catch {
     return null;
-  }
-}
-
-/**
- * Check backend health
- */
-export async function checkBackendHealth(): Promise<boolean> {
-  try {
-    const response = await fetch(`${API_BASE_URL}/health`);
-    return response.ok;
-  } catch (error) {
-    console.error("Backend health check failed:", error);
-    return false;
-  }
-}
-
-/**
- * Check Kiro CLI status
- */
-export async function checkKiroStatus(): Promise<{
-  available: boolean;
-  message: string;
-}> {
-  try {
-    const response = await fetch(`${API_BASE_URL}/api/kiro/status`);
-
-    if (!response.ok) {
-      return {available: false, message: "Failed to check Kiro status"};
-    }
-
-    const data = await response.json();
-    return {
-      available: data.available || false,
-      message: data.message || "Unknown status",
-    };
-  } catch (error) {
-    console.error("Kiro status check failed:", error);
-    return {available: false, message: "Connection failed"};
   }
 }

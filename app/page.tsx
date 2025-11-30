@@ -1,4 +1,5 @@
 import {About, Footer, Header, Hero, ScrollToTop} from "@/core/components";
+import {AppShowcase} from "@/core/components/sections/AppShowcase";
 
 // Hardcoded config for MVP
 const appConfig = {
@@ -20,6 +21,9 @@ export default function Home() {
 
       {/* Hero Section */}
       <Hero />
+
+      {/* App Showcase */}
+      <AppShowcase />
 
       {/* About Section */}
       <About />
