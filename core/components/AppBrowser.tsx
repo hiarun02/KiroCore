@@ -65,55 +65,44 @@ export function AppBrowser() {
           </p>
         </motion.div>
 
-        {/* App Grid - Modern Compact Cards */}
+        {/* App Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto">
           {apps.map((app, index) => (
             <motion.div
               key={app.id}
-              initial={{opacity: 0, scale: 0.95}}
-              whileInView={{opacity: 1, scale: 1}}
+              initial={{opacity: 0, y: 20}}
+              whileInView={{opacity: 1, y: 0}}
               viewport={{once: true}}
-              transition={{duration: 0.4, delay: index * 0.1}}
+              transition={{duration: 0.3, delay: index * 0.1}}
             >
               <Link href={`/${app.id}`}>
-                <div className="group relative from-zinc-900 to-zinc-900/50 border border-zinc-800 rounded-xl p-6 hover:border-zinc-700 transition-all duration-300 hover:shadow-lg cursor-pointer overflow-hidden h-full">
-                  {/* Accent bar */}
+                <div className="group relative bg-zinc-900/50 border border-zinc-800 rounded-xl p-5 hover:border-zinc-700 hover:bg-zinc-900 transition-all duration-200 cursor-pointer overflow-hidden h-full">
                   <div
-                    className="absolute top-0 left-0 right-0 h-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="absolute top-0 left-0 right-0 h-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
                     style={{backgroundColor: app.theme.primary}}
                   />
 
-                  {/* Glow effect on hover */}
-                  <div
-                    className="absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-300 blur-xl"
-                    style={{backgroundColor: app.theme.primary}}
-                  />
-
-                  {/* Content */}
-                  <div className="relative z-10 flex flex-col h-full">
-                    {/* Icon */}
-                    <div className="mb-3">
+                  <div className="relative flex flex-col h-full">
+                    <div className="flex items-start gap-3 mb-3">
                       <DynamicIcon
                         icon={app.icon}
-                        size={40}
-                        className="text-4xl"
+                        size={32}
+                        className="text-3xl shrink-0"
                       />
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-lg font-semibold text-zinc-100 group-hover:text-white transition-colors truncate">
+                          {app.name}
+                        </h3>
+                      </div>
                     </div>
-                    {/* Name */}
-                    <h3 className="text-xl font-bold text-zinc-100 group-hover:text-white transition-colors mb-2">
-                      {app.name}
-                    </h3>
-                    {/* Description */}
-                    <p className="text-sm text-zinc-400 group-hover:text-zinc-300 transition-colors mb-4 line-clamp-2 flex-grow">
+
+                    <p className="text-sm text-zinc-400 group-hover:text-zinc-300 transition-colors mb-4 line-clamp-2 grow">
                       {app.description}
                     </p>
-                    {/* Launch button */}
+
                     <div
-                      className="flex items-center justify-center gap-2 py-2 px-4 rounded-lg text-sm font-medium transition-all group-hover:translate-x-1"
-                      style={{
-                        backgroundColor: `${app.theme.primary}15`,
-                        color: app.theme.primary,
-                      }}
+                      className="flex items-center gap-2 text-sm font-medium transition-all group-hover:gap-3"
+                      style={{color: app.theme.primary}}
                     >
                       <span>Launch</span>
                       <svg

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import {useState, useEffect} from "react";
+import {useState, useEffect, useCallback} from "react";
 import {
   getConversations,
   deleteConversation,
@@ -34,32 +34,39 @@ export function Sidebar({
     string | null
   >(null);
 
-  const loadConversations = () => {
+  const loadConversations = useCallback(() => {
     const convs = getConversations(appType);
     setConversations(convs);
     const activeId = getActiveConversationId(appType);
     setActiveConversationId(activeId);
-  };
-
-  useEffect(() => {
-    loadConversations();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appType]);
 
-  const handleDeleteConversation = (
-    conversationId: string,
-    e: React.MouseEvent
-  ) => {
-    e.stopPropagation();
-    deleteConversation(appType, conversationId);
-    loadConversations();
-  };
+  // Load conversations from localStorage when appType changes
+  // This is a valid use case for setState in useEffect - loading initial data from external source
+  useEffect(() => {
+    const convs = getConversations(appType);
+    setConversations(convs);
+    const activeId = getActiveConversationId(appType);
+    setActiveConversationId(activeId);
+  }, [appType]);
 
-  const handleSelectConversation = (conversationId: string) => {
-    if (onSelectConversation) {
-      onSelectConversation(conversationId);
-    }
-  };
+  const handleDeleteConversation = useCallback(
+    (conversationId: string, e: React.MouseEvent) => {
+      e.stopPropagation();
+      deleteConversation(appType, conversationId);
+      loadConversations();
+    },
+    [appType, loadConversations]
+  );
+
+  const handleSelectConversation = useCallback(
+    (conversationId: string) => {
+      if (onSelectConversation) {
+        onSelectConversation(conversationId);
+      }
+    },
+    [onSelectConversation]
+  );
 
   return (
     <>
@@ -77,15 +84,39 @@ export function Sidebar({
           isOpen ? "translate-x-0" : "-translate-x-full lg:-translate-x-full"
         }`}
       >
-        {/* Header */}
+        {/* Header - App Logo and Close Button */}
         <div className="p-4 border-b border-zinc-800">
-          <Link
-            href="/apps"
-            className="flex items-center gap-3 text-zinc-100 hover:text-white transition-colors"
-          >
-            <DynamicIcon icon={appIcon} size={24} className="text-2xl" />
-            <span className="font-semibold text-lg">{appName}</span>
-          </Link>
+          <div className="grid grid-cols-[1fr_auto] items-center gap-4">
+            {/* App Logo */}
+            <Link
+              href="/apps"
+              className="flex items-center gap-2 text-zinc-100 hover:text-white transition-colors min-w-0"
+            >
+              <DynamicIcon icon={appIcon} size={22} className="shrink-0" />
+              <span className="font-semibold text-lg truncate">{appName}</span>
+            </Link>
+
+            {/* Close Button */}
+            <button
+              onClick={onToggle}
+              className="w-8 h-8 flex items-center justify-center text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 rounded-lg transition-colors"
+              aria-label="Close sidebar"
+            >
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
 
         {/* New Chat Button */}

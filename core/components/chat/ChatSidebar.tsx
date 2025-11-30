@@ -1,6 +1,6 @@
 "use client";
 
-import {useState} from "react";
+import {useState, useMemo} from "react";
 import {motion, AnimatePresence} from "framer-motion";
 
 interface ChatHistory {
@@ -16,29 +16,37 @@ interface ChatSidebarProps {
 
 export function ChatSidebar({isOpen, setIsOpen}: ChatSidebarProps) {
   const [activeChat, setActiveChat] = useState<string | null>("1");
-  const [chatHistory] = useState<ChatHistory[]>([
-    {id: "1", title: "Getting started with KiroCore", timestamp: new Date()},
-    {
-      id: "2",
-      title: "How to create new apps",
-      timestamp: new Date(Date.now() - 86400000),
-    },
-    {
-      id: "3",
-      title: "Configuration options",
-      timestamp: new Date(Date.now() - 172800000),
-    },
-    {
-      id: "4",
-      title: "API integration guide",
-      timestamp: new Date(Date.now() - 259200000),
-    },
-    {
-      id: "5",
-      title: "Deployment best practices",
-      timestamp: new Date(Date.now() - 345600000),
-    },
-  ]);
+
+  const chatHistory = useMemo<ChatHistory[]>(() => {
+    const now = Date.now();
+    return [
+      {
+        id: "1",
+        title: "Getting started with KiroCore",
+        timestamp: new Date(now),
+      },
+      {
+        id: "2",
+        title: "How to create new apps",
+        timestamp: new Date(now - 86400000),
+      },
+      {
+        id: "3",
+        title: "Configuration options",
+        timestamp: new Date(now - 172800000),
+      },
+      {
+        id: "4",
+        title: "API integration guide",
+        timestamp: new Date(now - 259200000),
+      },
+      {
+        id: "5",
+        title: "Deployment best practices",
+        timestamp: new Date(now - 345600000),
+      },
+    ];
+  }, []);
 
   return (
     <>
@@ -65,7 +73,6 @@ export function ChatSidebar({isOpen, setIsOpen}: ChatSidebarProps) {
           </svg>
         </button>
       )}
-      
 
       {/* Sidebar */}
       <AnimatePresence>
@@ -199,16 +206,4 @@ export function ChatSidebar({isOpen, setIsOpen}: ChatSidebarProps) {
       </AnimatePresence>
     </>
   );
-}
-
-function formatRelativeTime(date: Date): string {
-  const now = new Date();
-  const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-
-  if (diffInSeconds < 60) return "Just now";
-  if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
-  if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
-  if (diffInSeconds < 604800)
-    return `${Math.floor(diffInSeconds / 86400)}d ago`;
-  return date.toLocaleDateString();
 }

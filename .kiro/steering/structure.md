@@ -11,21 +11,33 @@ kirocore/
 │   ├── layout.tsx         # Root layout
 │   └── page.tsx           # Home page
 │
-├── apps/                   # App configurations (2 separate apps)
+├── apps/                   # App configurations (3+ apps)
 │   ├── study-buddy/
-│   │   ├── .kiro/         # App-specific Kiro config
-│   │   ├── agent.config.js
+│   │   ├── agent.config.ts
 │   │   └── README.md
-│   └── idea-forge/
-│       ├── .kiro/         # App-specific Kiro config
+│   ├── idea-forge/
+│   │   ├── agent.config.ts
+│   │   └── README.md
+│   └── code-mentor/
 │       ├── agent.config.ts
 │       └── README.md
 │
 ├── core/                   # Shared core components
 │   ├── components/        # Reusable UI components
+│   │   ├── chat/         # Chat-related components
+│   │   ├── layout/       # Layout components
+│   │   ├── sections/     # Page sections
+│   │   └── ui/           # UI primitives
 │   ├── hooks/             # Custom React hooks
+│   │   ├── useKeyboardShortcuts.tsx
+│   │   └── useKiroAgent.tsx
 │   ├── lib/               # Utility functions
+│   │   ├── animations.ts
+│   │   └── icons/
 │   ├── services/          # API services
+│   │   ├── api.ts
+│   │   ├── chatHistory.ts
+│   │   └── conversationHistory.ts
 │   └── types/             # TypeScript types
 │
 ├── server/                 # Express backend
@@ -79,7 +91,16 @@ Located in `core/components/`:
 Located in `core/hooks/`:
 
 - `useKiroAgent.tsx` - Main hook for AI agent interaction
+- `useKeyboardShortcuts.tsx` - Keyboard shortcut management
 - Returns: `{messages, sendMessage, loading, error, clear, pushMessage}`
+
+### UI Components
+
+Located in `core/components/ui/`:
+
+- `Toaster.tsx` - Toast notification system
+- `ShortcutsModal.tsx` - Keyboard shortcuts help modal
+- `TypingIndicator.tsx` - AI typing animation
 
 ### API Routes
 

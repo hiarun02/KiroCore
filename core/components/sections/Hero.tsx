@@ -7,7 +7,7 @@ export function Hero() {
   return (
     <section className="relative min-h-screen flex items-center justify-center px-4 py-20 overflow-hidden">
       {/* Animated background grid */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#18181b_1px,transparent_1px),linear-gradient(to_bottom,#18181b_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,#000_70%,transparent_110%)] opacity-20" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#18181b_1px,transparent_1px),linear-gradient(to_bottom,#18181b_1px,transparent_1px)] bg-size-[4rem_4rem] mask-[radial-gradient(ellipse_80%_50%_at_50%_50%,#000_70%,transparent_110%)] opacity-20" />
 
       {/* Background glow effects */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -129,7 +129,7 @@ export function Hero() {
         >
           <div className="text-center">
             <div className="text-3xl md:text-4xl font-bold text-zinc-100 mb-1">
-              2
+              3+
             </div>
             <div className="text-sm text-zinc-500">AI Applications</div>
           </div>

@@ -2,7 +2,7 @@
 
 **One skeleton. Multiple apps. Infinite possibilities.**
 
-KiroCore is a universal AI agent platform that transforms a single codebase into multiple specialized applications through configuration files. Built for the Skeleton Crew hackathon category.
+KiroCore is a universal AI agent platform that transforms a single codebase into multiple specialized applications through configuration files. Powered by Google Gemini AI.
 
 ## 🎯 The Concept
 
@@ -10,7 +10,7 @@ Instead of building separate AI apps from scratch, KiroCore provides:
 
 - **One reusable skeleton** - Core UI components and architecture
 - **Config-driven apps** - Each app defined by simple configuration
-- **Deep Kiro integration** - Hooks, specs, steering, and multi-agent support
+- **Real AI responses** - Powered by Google Gemini AI
 - **Production-ready** - Full-stack architecture with Express backend
 
 ## 📦 Two Separate Applications
@@ -47,21 +47,35 @@ Your creative brainstorming partner for developing and refining ideas.
 
 ---
 
-## ⚡ Quick Start (2 Minutes)
+## ⚡ Quick Start (3 Minutes)
 
-1. **Install & Run:**
+1. **Install Dependencies:**
 
    ```bash
-   npm install && npm run dev
+   npm install
    ```
 
-2. **Open Browser:**
+2. **Set Up Google Gemini AI:**
+
+   - Get free API key: https://makersuite.google.com/app/apikey
+   - Add to `server/.env`:
+     ```
+     GEMINI_API_KEY=your_api_key_here
+     ```
+
+3. **Run the App:**
+
+   ```bash
+   npm run dev
+   ```
+
+4. **Open Browser:**
 
    - Main: http://localhost:3000
    - StudyBuddy: http://localhost:3000/study-buddy
    - IdeaForge: http://localhost:3000/idea-forge
 
-3. **Try It:**
+5. **Try It:**
    - Click "StudyBuddy" → Ask "Explain React hooks"
    - Click "IdeaForge" → Say "Help me brainstorm a startup idea"
 
@@ -150,7 +164,7 @@ kirocore/
 **Backend:**
 
 - Express.js
-- Kiro CLI integration
+- Google Gemini AI
 - Node.js
 
 ## 📦 Installation
@@ -175,7 +189,15 @@ kirocore/
    cp server/.env.example server/.env
    ```
 
-4. **Run the development server:**
+4. **Add your Gemini API key to `server/.env`:**
+
+   ```
+   GEMINI_API_KEY=your_api_key_here
+   ```
+
+   Get your free API key at: https://makersuite.google.com/app/apikey
+
+5. **Run the development server:**
 
    ```bash
    npm run dev
@@ -230,12 +252,13 @@ kirocore/
 ## 🎨 Features
 
 - ✅ **Dynamic App Loading** - Apps load based on URL route
+- ✅ **Real AI Responses** - Powered by Google Gemini AI
 - ✅ **Chat Interface** - ChatGPT-style UI with sidebar
 - ✅ **Conversation History** - Persistent chat history (localStorage)
 - ✅ **Dark Mode** - Ghostly aesthetic theme
 - ✅ **Responsive Design** - Mobile-first approach
-- ✅ **Multi-Agent Support** - Different AI behavior per app
-- ✅ **Kiro Integration** - Deep integration with Kiro CLI
+- ✅ **Multi-Agent Support** - Different AI personalities per app
+- ✅ **React Icons** - Professional icon system
 - ✅ **RESTful API** - Clean backend architecture
 
 ## 🔧 Development
@@ -286,15 +309,16 @@ GET /api/apps
 GET /api/apps/:appType
 ```
 
-## 🏆 Hackathon Highlights
+## 🏆 Project Highlights
 
-**Why KiroCore wins:**
+**Why KiroCore stands out:**
 
-1. **Perfect Category Match** - Skeleton Crew wants "versatile skeleton code" → We deliver exactly that
-2. **Deep Kiro Usage** - Hooks, specs, steering, multi-agent, CLI integration
+1. **Versatile Skeleton** - One codebase powers multiple specialized apps
+2. **Real AI Integration** - Google Gemini AI provides intelligent responses
 3. **2 Complete Apps** - StudyBuddy + IdeaForge from one codebase
 4. **Production Quality** - Full-stack architecture, not just a demo
 5. **Extensible** - Easy to add new apps in minutes
+6. **Modern Stack** - Next.js 16, React 19, TypeScript, Tailwind CSS 4
 
 ## 🔧 Troubleshooting
 
@@ -320,11 +344,12 @@ PORT=3002 npm run dev:frontend
 - Check console for errors (F12)
 - Verify app config exists in `apps/[app-name]/`
 
-### Kiro CLI Not Found
+### Gemini AI Not Working
 
-- App works with fallback responses automatically
-- To enable full Kiro: Install Kiro CLI and add to PATH
-- Check status: `kiro --version`
+- Check API key is set in `server/.env`
+- Verify API key is valid at https://makersuite.google.com/app/apikey
+- Check backend console for error messages
+- App will show fallback responses if API key is missing
 
 ### Chat History Not Saving
 
@@ -336,14 +361,18 @@ PORT=3002 npm run dev:frontend
 
 ## 🎯 Roadmap
 
-- [x] Kiro CLI integration with fallback system
+- [x] Google Gemini AI integration
 - [x] Multi-conversation history
 - [x] Persistent chat history (localStorage)
+- [x] React Icons system
+- [ ] Streaming AI responses
+- [ ] Image upload & analysis
+- [ ] Voice input/output
 - [ ] Database for cloud sync
 - [ ] User authentication
-- [ ] App marketplace
+- [ ] Export conversations
+- [ ] Code syntax highlighting
 - [ ] Custom theme builder
-- [ ] Plugin system
 
 ## 📄 License
 
@@ -358,14 +387,13 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
 ## 📋 Documentation
 
 - **[Main README](./README.md)** - You are here
-- **[Contributing Guide](./CONTRIBUTING.md)** - How to contribute
+- **[Gemini Setup Guide](./server/GEMINI_SETUP.md)** - AI configuration
+- **[StudyBuddy Docs](./apps/study-buddy/README.md)** - Education app
+- **[IdeaForge Docs](./apps/idea-forge/README.md)** - Creative app
 - **[Changelog](./CHANGELOG.md)** - Version history
-- **[Project Assessment](./PROJECT_ASSESSMENT.md)** - Structure analysis
-- **[Kiro Integration](./KIRO_INTEGRATION.md)** - Kiro CLI details
-- **[.kiro Folder](./kiro/README.md)** - Kiro configuration
 
 ---
 
-**Built with 💀 for the Skeleton Crew hackathon**
+**Built with 💀 using Google Gemini AI**
 
 **Version:** 1.0.0 | **Status:** ✅ Production Ready | **License:** MIT

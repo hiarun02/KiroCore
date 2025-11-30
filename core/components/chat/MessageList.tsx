@@ -4,6 +4,7 @@ import {useEffect, useRef} from "react";
 import {Message} from "@/core/types/message";
 import {UserMessage} from "./UserMessage";
 import {AIMessage} from "./AIMessage";
+import {TypingIndicator} from "./TypingIndicator";
 
 interface MessageListProps {
   messages: Message[];
@@ -42,25 +43,7 @@ export function MessageList({messages, isLoading}: MessageListProps) {
         )
       )}
 
-      {isLoading && (
-        <div className="flex items-start gap-3">
-          <span className="text-2xl">👻</span>
-          <div className="flex gap-1 items-center bg-zinc-900 rounded-2xl px-4 py-3">
-            <div
-              className="w-2 h-2 bg-primary rounded-full animate-bounce"
-              style={{animationDelay: "0ms"}}
-            />
-            <div
-              className="w-2 h-2 bg-primary rounded-full animate-bounce"
-              style={{animationDelay: "150ms"}}
-            />
-            <div
-              className="w-2 h-2 bg-primary rounded-full animate-bounce"
-              style={{animationDelay: "300ms"}}
-            />
-          </div>
-        </div>
-      )}
+      {isLoading && <TypingIndicator />}
     </div>
   );
 }

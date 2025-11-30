@@ -24,7 +24,6 @@ interface ChatAreaProps {
 export function ChatArea({
   welcomeMessage,
   appIcon,
-  sidebarOpen = true,
   appType = "study-buddy",
   conversationId,
 }: ChatAreaProps) {
@@ -34,69 +33,48 @@ export function ChatArea({
   const [currentConversationId, setCurrentConversationId] =
     useState<string>("");
 
-  // Initialize or load conversation
   useEffect(() => {
     let convId: string;
 
     if (conversationId === "new") {
-      // Explicitly create a new conversation
       convId = createNewConversation(appType);
-      console.log(`[ChatArea] Created new conversation: ${convId}`);
     } else if (conversationId) {
-      // Load specific conversation
       convId = conversationId;
-      console.log(`[ChatArea] Loading conversation: ${convId}`);
     } else {
-      // Try to load active conversation or create new one
       convId =
         getActiveConversationId(appType) || createNewConversation(appType);
-      console.log(`[ChatArea] Using conversation: ${convId}`);
     }
 
     setCurrentConversationId(convId);
-
-    // Load messages for this conversation
-    const savedMessages = loadConversation(appType, convId);
-    console.log(
-      `[ChatArea] Loaded ${savedMessages.length} messages for conversation ${convId}`
-    );
-    setMessages(savedMessages);
+    setMessages(loadConversation(appType, convId));
   }, [appType, conversationId]);
 
-  // Save conversation whenever messages change
   useEffect(() => {
     if (messages.length > 0 && currentConversationId) {
-      console.log(
-        `[ChatArea] Saving ${messages.length} messages to conversation ${currentConversationId}`
-      );
       saveCurrentConversation(appType, currentConversationId, messages);
     }
   }, [messages, appType, currentConversationId]);
 
   const handleSendMessage = async (content: string) => {
-    // Clear any previous errors
     setError(null);
 
-    // Add user message immediately
-    const newMessage: Message = {
+    const userMessage: Message = {
       id: Date.now().toString(),
       role: "user",
       content,
       timestamp: new Date(),
     };
 
-    setMessages((prev) => [...prev, newMessage]);
+    setMessages((prev) => [...prev, userMessage]);
     setIsLoading(true);
 
     try {
-      // Send message to backend
       const response = await sendChatMessage({
         message: content,
         appType,
         conversationHistory: messages,
       });
 
-      // Add AI response with source info
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
@@ -106,17 +84,13 @@ export function ChatArea({
       };
 
       setMessages((prev) => [...prev, aiMessage]);
-    } catch (err) {
-      // Handle error
-      console.error("Chat error:", err);
+    } catch {
       setError("Failed to get response. Please try again.");
 
-      // Add error message to chat
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content:
-          "Sorry, I'm having trouble connecting right now. Please try again.",
+        content: "Sorry, I'm having trouble connecting. Please try again.",
         timestamp: new Date(),
         error: true,
       };

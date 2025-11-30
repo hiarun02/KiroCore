@@ -1,11 +1,16 @@
 // Framer Motion animation variants
+import type {Variants} from "framer-motion";
 
 export const messageVariants = {
-  hidden: {opacity: 0, y: 20},
+  hidden: {opacity: 0, y: 20, scale: 0.95},
   visible: {
     opacity: 1,
     y: 0,
-    transition: {duration: 0.3},
+    scale: 1,
+    transition: {
+      duration: 0.4,
+      ease: [0.4, 0, 0.2, 1],
+    },
   },
 };
 
@@ -55,13 +60,53 @@ export const emptyStateVariants = {
   },
 };
 
-export const floatingVariants = {
-  animate: {
-    y: [0, -10, 0],
+export const floatingAnimation = {
+  y: [0, -10, 0],
+  transition: {
+    duration: 3,
+    repeat: Infinity,
+    ease: "easeInOut" as any,
+  },
+};
+
+export const pageTransition = {
+  initial: {opacity: 0, y: 20},
+  animate: {opacity: 1, y: 0},
+  exit: {opacity: 0, y: -20},
+  transition: {duration: 0.3, ease: "easeInOut"},
+};
+
+export const staggerContainer = {
+  hidden: {opacity: 0},
+  visible: {
+    opacity: 1,
     transition: {
-      duration: 3,
-      repeat: Infinity,
-      ease: "easeInOut",
+      staggerChildren: 0.1,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+export const fadeInUp = {
+  hidden: {opacity: 0, y: 30},
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: [0.4, 0, 0.2, 1],
+    },
+  },
+};
+
+export const scaleIn = {
+  hidden: {opacity: 0, scale: 0.8},
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.3,
+      ease: "easeOut",
     },
   },
 };

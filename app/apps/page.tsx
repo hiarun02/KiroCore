@@ -5,7 +5,7 @@ import {AppBrowser, Footer, Header} from "@/core/components";
 export default function AppsPage() {
   return (
     <div className="min-h-screen bg-zinc-950">
-      <Header appName="Browse Apps" appIcon="FiTarget" />
+      <Header appName="KiroCore" appIcon="👻" />
 
       <main className="pt-20">
         <AppBrowser />
