@@ -1,5 +1,11 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 
+// Debug: Log the API URL being used
+if (typeof window !== "undefined") {
+  console.log("🔍 API_URL:", API_URL);
+  console.log("🔍 NEXT_PUBLIC_API_URL:", process.env.NEXT_PUBLIC_API_URL);
+}
+
 export interface ChatMessage {
   role: "user" | "assistant";
   content: string;
